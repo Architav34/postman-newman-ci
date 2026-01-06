@@ -1,0 +1,135 @@
+{
+	"info": {
+		"_postman_id": "a3565c42-ac6b-4970-b815-5786a9318059",
+		"name": "test",
+		"description": "This collection includes collection-level variables for webhook notifications:\\n- `webhook_url`: Configure your webhook endpoint (Slack, Teams, etc.)\\n- `notification_enabled`: Set to \"true\" to enable notifications\\n\\nThe collection includes a post-response script that tracks test results and provides webhook notification templates.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47246050",
+		"_collection_link": "https://qa-dbc.postman.co/workspace/QA-DBC-Workspace~b5d50d98-8033-42f0-8904-85590513f494/collection/47246050-a3565c42-ac6b-4970-b815-5786a9318059?action=share&source=collection_link&creator=47246050"
+	},
+	"item": [
+		{
+			"name": "test 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"\r",
+							"// Adjust keys as per API response\r",
+							"const token = response.token || response.accessToken;\r",
+							"const expiresIn = response.expiresIn || 7200; // seconds\r",
+							"\r",
+							"pm.environment.set(\"jwt_token\", token);\r",
+							"\r",
+							"// store expiry time (epoch)\r",
+							"const expiryTime = Date.now() + (expiresIn * 1000);\r",
+							"pm.environment.set(\"token_expiry\", expiryTime);\r",
+							"\r",
+							"console.log(\"JWT Token saved\");\r",
+							"pm.test(\"JWT token exists\", function () {\r",
+							"    pm.expect(pm.environment.get(\"jwt_token\")).to.not.be.null;\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "accept-language",
+						"value": "en-GB,en-US;q=0.9,en;q=0.8,hi;q=0.7"
+					},
+					{
+						"key": "authorization",
+						"value": ""
+					},
+					{
+						"key": "content-type",
+						"value": "application/json"
+					},
+					{
+						"key": "origin",
+						"value": "https://uatamrit.piramalswasthya.org"
+					},
+					{
+						"key": "priority",
+						"value": "u=1, i"
+					},
+					{
+						"key": "referer",
+						"value": "https://uatamrit.piramalswasthya.org/aam/"
+					},
+					{
+						"key": "sec-ch-ua",
+						"value": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\""
+					},
+					{
+						"key": "sec-ch-ua-mobile",
+						"value": "?1"
+					},
+					{
+						"key": "sec-ch-ua-platform",
+						"value": "\"Android\""
+					},
+					{
+						"key": "sec-fetch-dest",
+						"value": "empty"
+					},
+					{
+						"key": "sec-fetch-mode",
+						"value": "cors"
+					},
+					{
+						"key": "sec-fetch-site",
+						"value": "same-origin"
+					},
+					{
+						"key": "user-agent",
+						"value": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Mobile Safari/537.36"
+					},
+					{
+						"key": "Cookie",
+						"value": "_ga_6HS4ETKE8Z=GS2.2.s1762276395$o1$g0$t1762276395$j60$l0$h0; _ga=GA1.1.864280251.1762276395; _ga_CFSM74V9QS=GS2.1.s1762276395$o1$g1$t1762276439$j16$l0$h0; Jwttoken=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtb2tyb25nIiwidXNlcklkIjoiMTk1MSIsInRva2VuX3R5cGUiOiJhY2Nlc3MiLCJqdGkiOiJjNGJiOGEwMC01MjdlLTQzODItOTdiZS1iYmI5ZWFhNzk4ZTUiLCJpYXQiOjE3Njc1OTE1MzgsImV4cCI6MTc2NzYyMDMzOH0.MtP_d2dG0TLqjq3bTi_SpAwwtcyXQJIoPaUz-at-59vTSr9VsWvkDbTmVQ1AFF_eC-fjOyLzeUPphTbe5vKtBw"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"userName\":\"mokrong\",\"password\":\"970a810426b2b1670082413be79909be8b4d4895e0c270ac372ebbefc218144c2aae1cb21fa4cb9c787c0210b6157f3c0xWT4kF7KvwSE5YgeK9Sow==\",\"doLogout\":true,\"withCredentials\":true,\"captchaToken\":\"0.Lmh__tSWhrxy9YTdU0_jTpJavenqYhZwqvOF1Rmu8YiUjCw34pvfIuxVpV7eWPgs82jwHpV89RpwOH9MoUZtokELmBdOsNySjW37uuvwwLgGDf7W9Ce26iBbPlOy-pgzTpPgbn2i0bA9_xeMxe8q3kM_5QxnlN9QyNDy5eyoRPJOk_q6z8hp7uAnt04K4VzomxOG5FSm2uZoDfJrfZiihG4tAoi4SFdehprgqG2nvPft-o-RiiJ6rD2ig19uBWwC84g7IDwnUM42GlTXN5WPzpwToZPZui9oUD7K1Sg24gvfiVteTElAeUoIvkvdKGLjUtYU1-9EpLaw13Ob2zNNoJFYP-mPH9nIax3k8FeXU5SRP59uKO6UMxx48cwcA8wAoSpecSFYWg6BT1F4-mnYfhwYMJESh2jUuCEAEO6keMkZM6zBOEy5NLnAAEtY1pGbpqxMKzo8r3YSjz9LGRAFosYeq5hi76eA0PCvwWJ5aqirw_WRSmf__ykD3UkRmNUdaG7oOBIuRcqI6oqzeJKHj6qFj2Aq5Qjx1bQzUgTMmvRuCHOQq1WjF8ZuyZJl1Lfzu2ruaHz_Z_eyoAnV8j70TIGrGHUTZge_xxSNWY0Osi5fstKNvWNgA5jHISb7OlI40DcTFdvHl_SN-Ifz8q-l22KBDrsc89-szIwGVu4-iFGbiStCqTg0AvpchI1XL_-IPERNZbvGgQAIsckIxAZTshglS8b2r-o0kPui-A_49diny1wvm6mZmgE6jPS1N1iXVcillvgnd5HdmJX5BBhWPSRDZPy_xvn_5xkebjcMN4-1lQTFOm-hBEK2mG4170MGcBN-KrSJZuwIIkA743iezdY8C7PdAJ6c9TtLkU7y-wzbw9hdmwXb4a06SOg77T9bOS5P0dfA6apdxG_E7MQzPk8JJpYGxB_by1FRS2Wy1l9HWpURGXYXEtWkiof9dO2LaCa_-7C2A_NBI3omfqiFMQ.H76XP6fzhvs_CcQ6QRio8Q.f5037cfed1961f7c83b6910afb802904af2ea098708c56842d8c8bb70f5a52c3\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://uatamrit.piramalswasthya.org/common-api/user/userAuthenticate",
+					"protocol": "https",
+					"host": [
+						"uatamrit",
+						"piramalswasthya",
+						"org"
+					],
+					"path": [
+						"common-api",
+						"user",
+						"userAuthenticate"
+					]
+				},
+				"description": "Generated from cURL: curl 'https://uatamrit.piramalswasthya.org/common-api/user/userAuthenticate' \\\r\n  -H 'accept: application/json, text/plain, */*' \\\r\n  -H 'accept-language: en-GB,en-US;q=0.9,en;q=0.8,hi;q=0.7' \\\r\n  -H 'authorization;' \\\r\n  -H 'content-type: application/json' \\\r\n  -b '_ga_6HS4ETKE8Z=GS2.2.s1762276395$o1$g0$t1762276395$j60$l0$h0; _ga=GA1.1.864280251.1762276395; _ga_CFSM74V9QS=GS2.1.s1762276395$o1$g1$t1762276439$j16$l0$h0; Jwttoken=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtb2tyb25nIiwidXNlcklkIjoiMTk1MSIsInRva2VuX3R5cGUiOiJhY2Nlc3MiLCJqdGkiOiJjNGJiOGEwMC01MjdlLTQzODItOTdiZS1iYmI5ZWFhNzk4ZTUiLCJpYXQiOjE3Njc1OTE1MzgsImV4cCI6MTc2NzYyMDMzOH0.MtP_d2dG0TLqjq3bTi_SpAwwtcyXQJIoPaUz-at-59vTSr9VsWvkDbTmVQ1AFF_eC-fjOyLzeUPphTbe5vKtBw' \\\r\n  -H 'origin: https://uatamrit.piramalswasthya.org' \\\r\n  -H 'priority: u=1, i' \\\r\n  -H 'referer: https://uatamrit.piramalswasthya.org/aam/' \\\r\n  -H 'sec-ch-ua: \"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"' \\\r\n  -H 'sec-ch-ua-mobile: ?1' \\\r\n  -H 'sec-ch-ua-platform: \"Android\"' \\\r\n  -H 'sec-fetch-dest: empty' \\\r\n  -H 'sec-fetch-mode: cors' \\\r\n  -H 'sec-fetch-site: same-origin' \\\r\n  -H 'user-agent: Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Mobile Safari/537.36' \\\r\n  --data-raw '{\"userName\":\"mokrong\",\"password\":\"970a810426b2b1670082413be79909be8b4d4895e0c270ac372ebbefc218144c2aae1cb21fa4cb9c787c0210b6157f3c0xWT4kF7KvwSE5YgeK9Sow==\",\"doLogout\":true,\"withCredentials\":true,\"captchaToken\":\"0.Lmh__tSWhrxy9YTdU0_jTpJavenqYhZwqvOF1Rmu8YiUjCw34pvfIuxVpV7eWPgs82jwHpV89RpwOH9MoUZtokELmBdOsNySjW37uuvwwLgGDf7W9Ce26iBbPlOy-pgzTpPgbn2i0bA9_xeMxe8q3kM_5QxnlN9QyNDy5eyoRPJOk_q6z8hp7uAnt04K4VzomxOG5FSm2uZoDfJrfZiihG4tAoi4SFdehprgqG2nvPft-o-RiiJ6rD2ig19uBWwC84g7IDwnUM42GlTXN5WPzpwToZPZui9oUD7K1Sg24gvfiVteTElAeUoIvkvdKGLjUtYU1-9EpLaw13Ob2zNNoJFYP-mPH9nIax3k8FeXU5SRP59uKO6UMxx48cwcA8wAoSpecSFYWg6BT1F4-mnYfhwYMJESh2jUuCEAEO6keMkZM6zBOEy5NLnAAEtY1pGbpqxMKzo8r3YSjz9LGRAFosYeq5hi76eA0PCvwWJ5aqirw_WRSmf__ykD3UkRmNUdaG7oOBIuRcqI6oqzeJKHj6qFj2Aq5Qjx1bQzUgTMmvRuCHOQq1WjF8ZuyZJl1Lfzu2ruaHz_Z_eyoAnV8j70TIGrGHUTZge_xxSNWY0Osi5fstKNvWNgA5jHISb7OlI40DcTFdvHl_SN-Ifz8q-l22KBDrsc89-szIwGVu4-iFGbiStCqTg0AvpchI1XL_-IPERNZbvGgQAIsckIxAZTshglS8b2r-o0kPui-A_49diny1wvm6mZmgE6jPS1N1iXVcillvgnd5HdmJX5BBhWPSRDZPy_xvn_5xkebjcMN4-1lQTFOm-hBEK2mG4170MGcBN-KrSJZuwIIkA743iezdY8C7PdAJ6c9TtLkU7y-wzbw9hdmwXb4a06SOg77T9bOS5P0dfA6apdxG_E7MQzPk8JJpYGxB_by1FRS2Wy1l9HWpURGXYXEtWkiof9dO2LaCa_-7C2A_NBI3omfqiFMQ.H76XP6fzhvs_CcQ6QRio8Q.f5037cfed1961f7c83b6910afb802904af2ea098708c56842d8c8bb70f5a52c3\"}'"
+			},
+			"response": []
+		}
+	]
+}
