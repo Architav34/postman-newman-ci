@@ -2,7 +2,7 @@ name: Postman Newman CI
 
 on:
   schedule:
-    - cron: '0 */6 * * *'   # Runs every 6 hours
+    - cron: '50 5 * * *'   # Runs every day at 11:20 AM IST
   workflow_dispatch:
 
 jobs:
